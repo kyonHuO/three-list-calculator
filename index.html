@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ja" data-app-build="2026.10.06.2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#303131">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="3列電卓">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+<meta name="description" content="3列それぞれ独立して計算できる、明細付き電卓。行を長押しすると上に空行を追加、左スワイプすると削除ボタンを表示できます。">
+<title>3列電卓</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23313232'/%3E%3Cpath d='M5 6h6v20H5zm8 0h6v20h-6zm8 0h6v20h-6z' fill='%23eee'/%3E%3Cpath d='M6 10h4m4 0h4m4 0h4M6 15h4m4 0h4m4 0h4M6 20h4m4 0h4m4 0h4' stroke='%234665a5'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box} :root{font-family:Arial,"Noto Sans JP",sans-serif;color:#080808;color-scheme:light;--blue:#31558b;--paper:#fff;--row-font:clamp(14px,min(2.85vw,4.2dvh),58px);--key-font:clamp(24px,min(4vw,6.2dvh),72px);--gap:clamp(6px,1.1vw,22px)}
+html,body{margin:0;min-height:100%;background:#303131}body{-webkit-tap-highlight-color:transparent;overscroll-behavior:none}button{font-family:inherit;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}button:focus-visible{outline:3px solid #ffcf20;outline-offset:2px;z-index:3}button:disabled{cursor:default;filter:saturate(.65);opacity:.45}button{border:0} .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.app{height:100dvh;min-height:350px;width:100%;display:grid;grid-template-columns:65% 35%;padding:clamp(5px,.7vw,14px) clamp(8px,1.2vw,24px) clamp(6px,.9vw,18px);gap:0;background-color:#333535;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.33 .55' numOctaves='3' seed='9'/%3E%3CfeDiffuseLighting surfaceScale='2' diffuseConstant='.65' lighting-color='%237c7c7c'%3E%3CfeDistantLight azimuth='235' elevation='45'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Cpath fill='%23333333' d='M0 0h160v160H0z' filter='url(%23t)' opacity='.57'/%3E%3C/svg%3E");overflow:hidden}
+.ledgers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap);padding-right:clamp(12px,1.5vw,30px);min-height:0;min-width:0}.ledger{display:grid;grid-template-rows:7% minmax(0,1fr) 7%;row-gap:clamp(5px,.7dvh,12px);min-width:0;min-height:0}.total{background:#c0c0c0;background-image:linear-gradient(150deg,#ffffff22,#ffffff05);text-align:right;font-size:clamp(23px,min(4.2vw,6.4dvh),90px);line-height:1.05;display:flex;align-items:center;justify-content:flex-end;position:relative;min-width:0;padding:0 3px;overflow:hidden;font-variant-numeric:tabular-nums}.total-value{white-space:nowrap}.total.error .total-value{color:#b40000;font-size:.5em}.memory-indicator{position:absolute;top:2px;left:3px;padding:2px;background:#ddd;color:#4c1990;font-size:12px;line-height:1;border-radius:2px;box-shadow:0 1px 2px #3338}.memory-indicator[hidden]{display:none}
+.paper{min-height:0;background:#fff;position:relative;box-shadow:0 0 1px #0005}.ledger.active .paper{outline:clamp(3px,.45vw,8px) solid #3f4141;border-radius:1px;box-shadow:0 4px 0 6px #181818,0 -3px 0 6px #777}.rows{height:100%;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#bbb #eee;overscroll-behavior:contain;touch-action:pan-y;scroll-behavior:auto}.row-shell{position:relative;width:100%;height:calc(100% / 16);min-height:17px;overflow:hidden;--delete-width:min(64px,65%)}.row{position:relative;z-index:1;display:flex;justify-content:flex-end;align-items:center;width:100%;height:100%;min-height:0;padding:0 3px;border-bottom:1px solid #d4d4d4;background:#fff;font-size:var(--row-font);line-height:1.08;letter-spacing:-.025em;font-weight:400;text-align:right;white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums;touch-action:pan-y}.row-shell:last-child .row{border-bottom:0}.row{transition:transform .16s ease}.row-shell.swipe-open .row{transform:translateX(calc(-1 * var(--delete-width)))}.row-shell.swiping .row{transition:none}.row-delete{position:absolute;inset:0 0 0 auto;width:var(--delete-width);padding:0 2px;background:#c5222f;color:#fff;font-size:clamp(12px,1.5vw,20px);font-weight:700;border-bottom:1px solid #a31c27;visibility:hidden;touch-action:pan-y}.row-delete:disabled{opacity:1;filter:none}.row-shell.swipe-open .row-delete,.row-shell.swiping .row-delete{visibility:visible}.row-delete:focus-visible{outline-offset:-3px}.row.negative{color:#ff0904}.ledger.active .row.selected{background:#d0d0d4}.row .value{pointer-events:none}.key{display:flex;align-items:center;justify-content:center;width:100%;padding:0;color:var(--blue);font-size:var(--key-font);line-height:1;font-weight:600;border:2px solid #aaa;border-top-color:#ddd;border-left-color:#a2a2a2;border-radius:clamp(6px,.85vw,15px);background:linear-gradient(#e5e5e5 0%,#d1d1d1 42%,#dedede 100%);box-shadow:-3px 3px 1px #111,2px 0 0 #c5c5c5,inset 0 1px 2px #fff7;text-shadow:0 1px 0 #ffffff3a}.key:active{transform:translateY(2px);box-shadow:-1px 1px 1px #111,inset 0 2px 4px #4446;filter:brightness(.95)}.clear-all{font-size:var(--key-font);border-radius:clamp(8px,1vw,17px);margin-top:clamp(4px,.8dvh,9px);min-height:0}
+.control-panel{display:grid;grid-template-rows:10.5% 5.2% 9.8% minmax(0,1fr);row-gap:clamp(7px,1.8dvh,25px);min-width:0;min-height:0;padding-left:clamp(2px,.45vw,9px)}.brand{display:flex;position:relative;align-items:center;border-bottom:2px solid #9a9a96;min-width:0;padding:0 1.7%;gap:2px;overflow:hidden}.wordmark{display:flex;align-items:center;line-height:.92;white-space:nowrap;color:#f5e76c;text-shadow:1px 2px 1px #111;letter-spacing:-.035em;font-family:"Times New Roman",Georgia,serif;font-size:clamp(24px,min(4.45vw,7.2dvh),84px);flex:1}.brand-star{font-family:Arial,sans-serif;color:#fff;text-shadow:2px 3px #111;font-weight:400;font-size:1.38em;line-height:.75;margin-left:-.045em}.version{position:absolute;bottom:6%;right:42%;color:#eee;font-size:clamp(12px,1.15vw,23px);font-family:Arial,sans-serif;letter-spacing:-.06em}.gear{background:transparent;color:#afaf87;font-size:clamp(26px,min(4.4vw,7dvh),82px);width:17%;padding:0;line-height:1;filter:drop-shadow(0 1px 1px #111);flex-shrink:0}.gear svg{width:100%;height:100%;max-height:8dvh;fill:#4b4d4a;stroke:#a6a784;stroke-width:1.3}
+.lists{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--gap)}.tab{font-size:clamp(16px,min(2.1vw,3.4dvh),40px);font-weight:700;color:#0084ff;border-radius:5px;border:1.5px solid #a5a5a5;box-shadow:-1px 2px 1px #171717;background:linear-gradient(#eee,#ccc);padding:0;line-height:1}.tab[aria-selected=true]{color:#fff925;background:linear-gradient(#a7bcff,#5876d1 60%,#849eef);border:2px solid #3d54ba;box-shadow:inset 0 1px 0 #fff8,0 2px 1px #111}.memory-tools{display:grid;grid-template-columns:1fr 1fr 1fr 1.18fr;column-gap:9%;align-items:stretch;padding:.5% .4% 0}.memory-key{font-size:clamp(19px,min(2.7vw,4.4dvh),54px);font-weight:750;color:#46119a;border-radius:6px;background:linear-gradient(#fff,#fff);border:2px solid #b7b7b7;box-shadow:-2px 3px #080808;padding:0;letter-spacing:-.05em}.memory-key.clear-memory{background:linear-gradient(#c8c8c8,#a8a8a8)}.camera{display:flex;align-items:center;justify-content:center;background:linear-gradient(#a4a4a4,#888);border:2px solid #b3b3b3;border-radius:8px;box-shadow:-2px 3px #080808;padding:10%;margin-left:5%}.camera svg{width:100%;height:100%;overflow:visible}
+.keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(7,minmax(0,1fr));gap:clamp(8px,1.8dvh,24px) var(--gap);padding:0 .4% .5%;min-height:0}.key.operator{color:#fff;background:linear-gradient(#959595,#838383 55%,#8f8f8f);font-weight:700;font-size:calc(var(--key-font)*1.14);text-shadow:none}.key.undo,.key.redo{color:white;background:linear-gradient(#aaaac9,#626d9f 55%,#626fa8);font-size:calc(var(--key-font)*1.08);border-color:#6676af}.key.sign{font-size:calc(var(--key-font)*.64);font-weight:400;color:#e5e5e5;background:linear-gradient(#72757599,#83868699)}.key.sign span{border:2px solid #d2d2d2;border-radius:50%;padding:0 .07em;line-height:1.3;font-size:.86em}.key svg{width:50%;height:80%;fill:currentColor}
+.toast{position:fixed;bottom:max(10px,env(safe-area-inset-bottom));left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:20;max-width:94vw;background:#20242eef;color:#fff;border:1px solid #8992a3;border-radius:8px;padding:10px 16px;font-size:14px;box-shadow:0 3px 15px #0004;transition:opacity .15s,transform .15s;white-space:pre-line}.toast.show{opacity:1;transform:translate(-50%,0)}
+dialog{max-width:min(440px,calc(100vw - 28px));max-height:88dvh;border:1px solid #9c9c9c;border-radius:14px;padding:22px;background:#f7f7f7;color:#222;box-shadow:0 10px 70px #0008;font-size:15px}dialog::backdrop{background:#0008}dialog h2{margin:0 0 16px;font-size:21px}dialog p{line-height:1.65;margin:12px 0}dialog .close{float:right;border:0;background:transparent;color:#333;font-size:25px;margin:-9px -6px 0 10px;padding:4px 8px}dialog label{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:10px 0}dialog select{max-width:60%;padding:8px;font:inherit;border:1px solid #aaa;border-radius:5px;background:#fff}dialog .action{font:inherit;padding:10px 14px;background:#e6ebf6;border:1px solid #929cb0;border-radius:6px;margin:5px 0;width:100%;color:#183c74}dialog details{border-top:1px solid #ccc;margin-top:14px;padding-top:14px}dialog summary{cursor:pointer;color:#555}dialog .fine{font-size:13px;color:#666}dialog kbd{padding:2px 4px;border:1px solid #aaa;border-radius:3px;background:white}dialog img{width:100%;margin:12px 0;background:white}dialog .download{display:block;text-align:center;text-decoration:none;color:#fff;background:#31558b;border-radius:6px;padding:12px}
+@media(orientation:portrait),(max-width:580px){:root{--gap:7px;--key-font:clamp(29px,9vw,45px);--row-font:clamp(15px,4.7vw,26px)}.app{display:flex;flex-direction:column;gap:11px;height:auto;min-height:100dvh;padding:9px 10px 15px;overflow:visible}.ledgers{flex:none;height:47dvh;min-height:340px;padding:0 2px;gap:9px}.ledger{grid-template-rows:9% minmax(0,1fr) 9%;row-gap:5px}.total{font-size:clamp(21px,6.7vw,38px)}.row-shell{height:calc(100% / 12);min-height:20px}.clear-all{font-size:clamp(23px,7vw,36px);margin-top:3px}.ledger.active .paper{outline-width:3px;box-shadow:0 3px 0 3px #181818,0 -2px 0 3px #777}.control-panel{flex:none;height:560px;display:grid;grid-template-rows:54px 34px 45px minmax(0,1fr);row-gap:12px;padding:0}.brand{border-bottom:1px solid #9a9a96;padding:0 4%;overflow:visible}.wordmark{font-size:44px;justify-content:center}.brand-star{font-size:1.26em}.version{font-size:12px;bottom:2px;right:37%}.gear{font-size:41px;width:12%;position:absolute;right:1%;top:5px;height:40px}.gear svg{max-height:none}.tab{font-size:21px}.memory-tools{grid-template-columns:1fr 1fr 1fr 1fr;column-gap:10%;padding:0 3%}.memory-key{font-size:25px}.camera{padding:6px 13px}.keypad{gap:10px 10px;padding:0 2px}.key{border-radius:8px}.key.operator{font-size:calc(var(--key-font)*1.05)}.key.undo,.key.redo{font-size:var(--key-font)}}
+@media(min-width:581px) and (orientation:landscape) and (max-height:500px){.app{padding:5px 9px 8px;min-height:330px}.control-panel{row-gap:6px;grid-template-rows:10% 6% 9.8% minmax(0,1fr)}.keypad{gap:7px 9px}.ledgers{padding-right:12px;gap:10px}.ledger{row-gap:4px}.row-shell{min-height:14px}.key{border-width:1px;border-radius:5px}.memory-key{border-width:1px}.clear-all{margin-top:2px}.version{font-size:12px;bottom:0}.wordmark{font-size:clamp(24px,4.7vw,32px)}.brand{padding:0}.tab{font-size:16px}}
+.app{padding-top:max(clamp(5px,.7vw,14px),env(safe-area-inset-top));padding-right:max(clamp(8px,1.2vw,24px),env(safe-area-inset-right));padding-bottom:max(clamp(6px,.9vw,18px),env(safe-area-inset-bottom));padding-left:max(clamp(8px,1.2vw,24px),env(safe-area-inset-left))}
+@media(orientation:portrait),(max-width:580px){.app{padding-top:max(9px,env(safe-area-inset-top));padding-right:max(10px,env(safe-area-inset-right));padding-bottom:max(15px,env(safe-area-inset-bottom));padding-left:max(10px,env(safe-area-inset-left))}}
+.save-warning{position:fixed;top:max(6px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:30;max-width:94vw;background:#fff0c2;color:#542e00;border:1px solid #a36600;border-radius:7px;padding:8px 12px;font:13px/1.45 Arial,sans-serif;box-shadow:0 2px 8px #0006}.save-warning[hidden],dialog .action[hidden]{display:none}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app" aria-label="3列電卓">
+  <section class="ledgers" aria-label="計算リスト"></section>
+  <section class="control-panel" aria-label="電卓操作">
+    <header class="brand"><div class="wordmark" aria-label="A-CalcM スター">A-CalcM<span class="brand-star" aria-hidden="true">☆</span></div><span class="version">Ver. 3.3</span><button class="gear" id="settings-button" aria-label="設定と使い方" title="設定と使い方"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M25 3h10l2 7 5 3 7-2 6 9-5 5v8l5 5-5 9-8-1-5 3-2 7H25l-2-7-5-3-7 2-6-9 5-5v-8l-5-5 5-9 8 1 5-3z"/><circle cx="30" cy="30" r="16" fill="#333535"/></svg></button></header>
+    <nav class="lists" role="tablist" aria-label="入力する列"><button class="tab" role="tab" data-list="0" aria-selected="true">List1</button><button class="tab" role="tab" data-list="1" aria-selected="false">List2</button><button class="tab" role="tab" data-list="2" aria-selected="false">List3</button></nav>
+    <div class="memory-tools"><button class="memory-key clear-memory" data-action="mc" aria-label="選択中の列のメモリーを消去" title="メモリー消去">MC</button><button class="memory-key" data-action="mplus" aria-label="選択中の列の合計をメモリーに加算" title="合計をメモリーに加算">M+</button><button class="memory-key" data-action="mminus" aria-label="選択中の列の合計をメモリーから減算" title="合計をメモリーから減算">M−</button><button class="camera" id="export-button" aria-label="3列の計算を画像で保存" title="計算を画像で保存"><svg viewBox="0 0 64 51" aria-hidden="true"><defs><radialGradient id="lens"><stop stop-color="#d2e4ff"/><stop offset=".55" stop-color="#8da9d3"/><stop offset=".8" stop-color="#294265"/><stop offset="1" stop-color="#1a202b"/></radialGradient><linearGradient id="camera-body" x2="0" y2="1"><stop stop-color="#777"/><stop offset="1" stop-color="#282828"/></linearGradient></defs><path d="M5 10h12l5-8h20l5 8h12v38H5z" fill="url(#camera-body)" stroke="#d4d4d4" stroke-width="2"/><rect x="8" y="13" width="12" height="32" rx="2" fill="#252525"/><circle cx="39" cy="29" r="16" fill="url(#lens)" stroke="#c6c6c6" stroke-width="3"/></svg></button></div>
+    <div class="keypad">
+      <button class="key" data-digit="7">7</button><button class="key" data-digit="8">8</button><button class="key" data-digit="9">9</button>
+      <button class="key" data-digit="4">4</button><button class="key" data-digit="5">5</button><button class="key" data-digit="6">6</button>
+      <button class="key" data-digit="1">1</button><button class="key" data-digit="2">2</button><button class="key" data-digit="3">3</button>
+      <button class="key" data-digit="0">0</button><button class="key" data-digit="00">00</button><button class="key" data-digit="." id="decimal-key" aria-label="小数点">,</button>
+      <button class="key sign" data-action="sign" aria-label="正負を切り替え" title="正負を切り替え"><span>+ / −</span></button><button class="key operator" data-op="*" aria-label="掛ける">×</button><button class="key operator" data-op="+" aria-label="足す・次の行">+</button>
+      <button class="key operator" data-action="clear" aria-label="選択中の行を消去">C</button><button class="key operator" data-op="/" aria-label="割る">÷</button><button class="key operator" data-op="-" aria-label="引く">−</button>
+      <button class="key undo" data-action="undo" aria-label="選択中の列の操作を元に戻す" title="元に戻す"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M6 7v29h29L24 25c22-10 33 16 13 31C67 39 53 4 23 14L14 20z"/></svg></button><button class="key redo" data-action="redo" aria-label="選択中の列の操作をやり直す" title="やり直す"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M58 7v29H29l11-11C18 15 7 41 27 56-3 39 11 4 41 14l9 6z"/></svg></button><button class="key operator" data-action="equals" aria-label="計算を確定・次の行">=</button>
+    </div>
+  </section>
+</main>
+<button id="storage-warning" class="save-warning" hidden aria-label="保存の問題を確認">自動保存が停止しています。設定を確認</button>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="settings"><button class="close" aria-label="閉じる">×</button><h2>設定と使い方</h2>
+ <button class="action" id="insert-row">選択行の下に空行を追加</button>
+ <button class="action" id="delete-row">選択行を削除</button>
+ <label>数字の表示<select id="number-format"><option value="reference">1.234,56</option><option value="japan">1,234.56</option></select></label>
+ <label>小数の最大桁数<select id="precision"><option value="2">2桁</option><option value="6">6桁</option><option value="10" selected>10桁</option></select></label>
+ <p>List1〜3 で入力する列を切り替えます。行をタップすると修正、約0.6秒の長押しでその上に空行を追加できます。左にスワイプすると「削除」が現れ、タップすると行を削除します。↶ で元に戻せます。</p>
+ <p>「+」「−」「×」「÷」で次の計算を選び、「=」で確定します。各行は上から順に計算され、空行を挟んでも計算は続きます。</p>
+ <p>MC・M+・M− は列ごとに独立しています。合計欄に出る M をタップするとメモリーの値を入力できます。カメラのボタンは計算結果の画像保存です。</p>
+ <details><summary>ホーム画面・保存・オフライン</summary>
+ <p>iPhoneのSafariでこのページを開き、「共有」→「ホーム画面に追加」→「追加」を選びます。「Webアプリとして開く」が表示されたらオンにしてください。</p>
+ <p id="storage-status" role="status">保存を確認しています…</p>
+ <button class="action" id="resume-saving" hidden>現在の計算で保存を再開</button>
+ <p id="offline-status" role="status">オフライン使用を準備しています…</p>
+ <button class="action" id="apply-update" hidden>計算を保存して新しい版に更新</button>
+ <p class="fine">初回は通信できる状態で開き、「オフライン使用の準備ができました」と表示されてから使ってください。計算・メモリー・設定と最近の取り消し履歴を、この端末のブラウザ内に自動保存します。通常は列ごとに直近20件まで、容量に応じて履歴を減らします。</p>
+ <p class="fine">自動保存できるのは同時に1画面です。別の画面で開くと警告が出るため、先に開いた画面を閉じて保存を再開してください。端末間の同期・クラウドバックアップはありません。Safariとホーム画面のアプリでは保存先が分かれる場合があります。プライベートブラウズの終了、サイトデータの削除、OSによる削除などで保存内容を失う可能性があるため、大切な計算は画像でも保存してください。</p>
+ </details>
+ <details><summary>キーボード・この試作について</summary><p>数字と四則演算キーで入力。Enter で確定、Delete で行を消去、Backspace で1文字削除。Shift+Enter で行追加、Shift+Delete で行を削除。Ctrl/⌘+Z で元に戻す、Ctrl/⌘+Shift+Z でやり直す。Alt+1〜3 で列切替。</p><p class="fine">提供画像の画面構成を再現した、個人用のHTML試作です。A-CalcM公式アプリではありません。入力内容は端末内に保存し、アプリから外部へ送信しません。保存の状態は上の「ホーム画面・保存・オフライン」で確認できます。小数の表示は指定桁数に四捨五入されますが、計算は丸め前の値で続けます。</p></details>
+</dialog>
+<dialog id="export-dialog"><button class="close" aria-label="閉じる">×</button><h2>計算を画像で保存</h2><img id="export-image" alt="3列の計算結果"><a class="download" id="download-image" download="3列電卓.png">PNG画像を保存</a><p class="fine">保存が始まらない場合は、画像を長押しして保存してください。</p></dialog>
+<script>
+(() => {
+'use strict';
+const MIN_ROWS=16,MAX_ROWS=1000,MAX_DIGITS=18;
+const blank=()=>({op:'+',raw:''});
+const makeColumn=()=>({rows:Array.from({length:MIN_ROWS},blank),selected:0,replace:false,editing:false,memory:'0',undo:[],redo:[]});
+const state={columns:[makeColumn(),makeColumn(),makeColumn()],active:0,format:'reference',precision:10};
+let hold=null,gesture=null,swipeOpen=null,suppressClickUntil=0,blockPointerClick=false,multiTouch=false;
+const pointers=new Set();
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const gcd=(a,b)=>{a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b]}return a||1n};
+const frac=(n,d=1n)=>{if(d===0n)throw Error('0では割れません');if(d<0n){n=-n;d=-d}const g=gcd(n,d);return {n:n/g,d:d/g}};
+const parse=raw=>{const parts=String(raw||'0').split('.');const places=(parts[1]||'').length;return frac(BigInt((parts[0]||'0')+(parts[1]||'')),10n**BigInt(places))};
+function apply(a,b,op){if(op==='+')return frac(a.n*b.d+b.n*a.d,a.d*b.d);if(op==='-')return frac(a.n*b.d-b.n*a.d,a.d*b.d);if(op==='*')return frac(a.n*b.n,a.d*b.d);return frac(a.n*b.d,a.d*b.n)}
+function calculate(rows){let value=frac(0n);try{for(const row of rows){if(row.raw===''||row.raw==='-')continue;value=apply(value,parse(row.raw),row.op)}return {value,error:null}}catch(e){return {value:null,error:e.message}}}
+function decimal(value,precision=state.precision){const sign=value.n<0n?'-':'';const n=value.n<0n?-value.n:value.n;const scale=10n**BigInt(precision);let scaled=n*scale/value.d;if((n*scale%value.d)*2n>=value.d)scaled++;const a=String(scaled/scale),b=String(scaled%scale).padStart(precision,'0').replace(/0+$/,'');return (scaled===0n?'':sign)+a+(b?'.'+b:'')}
+function format(raw){const negative=raw.startsWith('-');if(negative)raw=raw.slice(1);let [a,b]=raw.split('.');a=a||'0';const group=state.format==='reference'?'.':',';const point=state.format==='reference'?',':'.';return (negative?'−':'')+a.replace(/\B(?=(\d{3})+(?!\d))/g,group)+(b!==undefined?point+b:'')}
+function rowText(row){if(!row.raw)return row.op==='+'?'':({'-':'−','*':'×','/':'÷'}[row.op]);return (row.op==='+'?'':({'-':'−','*':'×','/':'÷'}[row.op]))+format(row.raw)}
+function col(){return state.columns[state.active]}
+function snapshot(c){return JSON.stringify({rows:c.rows,selected:c.selected,replace:c.replace,editing:c.editing,memory:c.memory})}
+function remember(c){c.undo.push(snapshot(c));if(c.undo.length>200)c.undo.shift();c.redo=[]}
+function change(fn){const c=col(),before=snapshot(c),undo=c.undo.slice(),redo=c.redo.slice();remember(c);fn(c);try{validateColumn(c)}catch{Object.assign(c,JSON.parse(before),{undo,redo});toast('計算結果が大きすぎるため操作を取り消しました。保存内容は変更していません。');return false}render();return true}
+let toastTimer;
+function toast(message){clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').classList.add('show');toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2500)}
+function ensureRows(c){while(c.selected>=c.rows.length)c.rows.push(blank())}
+function advance(c,op='+'){if(c.selected>=MAX_ROWS-1){toast('1列に追加できるのは1,000行までです');return}c.selected++;ensureRows(c);c.replace=!!c.rows[c.selected].raw;c.editing=false;if(!c.rows[c.selected].raw)c.rows[c.selected].op=op}
+function typeDigit(d){const c=col(),row=c.rows[c.selected];let raw=c.replace?'':row.raw;if(d==='.'&&raw.includes('.'))return;if((raw.replace(/[-.]/g,'')+d.replace('.','')).length>MAX_DIGITS){toast('入力は18桁までです');return}change(c=>{const r=c.rows[c.selected];if(c.replace)r.raw='';c.replace=false;c.editing=false;if(d==='.'){r.raw=(r.raw===''?'0':r.raw==='-'?'-0':r.raw)+'.'}else{r.raw+=d;const negative=r.raw.startsWith('-');r.raw=(negative?'-':'')+r.raw.replace(/^-/,'').replace(/^0+(?=\d)/,'')} });scrollSelected()}
+function setOperator(op){change(c=>{const row=c.rows[c.selected];if(c.editing){row.op=op;c.replace=true;return}if(row.raw!==''&&row.raw!=='-')advance(c,op);else row.op=op});scrollSelected()}
+function equals(){const result=calculate(col().rows);if(result.error){toast(result.error+'。該当の行を修正してください');return}change(c=>{if(c.rows[c.selected].raw)advance(c);c.editing=false});scrollSelected()}
+function select(index,row=null){state.active=index;const c=col();if(row!==null){c.selected=row;c.replace=true;c.editing=true}render();}
+function insertRow(index,row,above=false){select(index);const c=col();if(c.rows.length>=MAX_ROWS){toast('1列に追加できるのは1,000行までです');return}const position=row+(above?0:1);change(c=>{c.rows.splice(position,0,blank());c.selected=position;c.replace=false;c.editing=false});scrollSelected();if(above)$('.ledger.active .row.selected')?.focus({preventScroll:true});toast('List'+(index+1)+'：'+(above?'上':'下')+'に空行を追加しました')}
+function insertBelow(index=state.active,row=col().selected){insertRow(index,row)}
+function insertAbove(index=state.active,row=col().selected){insertRow(index,row,true)}
+function deleteRow(index=state.active,row=state.columns[index]?.selected){
+ const c=state.columns[index];if(!c||!Number.isInteger(row)||row<0||row>=c.rows.length)return;
+ state.active=index;
+ change(c=>{c.rows.splice(row,1);while(c.rows.length<MIN_ROWS)c.rows.push(blank());c.selected=Math.min(row,c.rows.length-1);c.replace=!!c.rows[c.selected].raw;c.editing=!!c.rows[c.selected].raw});
+ scrollSelected();$('.ledger.active .row.selected')?.focus({preventScroll:true});toast('List'+(index+1)+'：'+(row+1)+'行目を削除しました。↶ で戻せます');
+}
+function scrollSelected(){requestAnimationFrame(()=>{const element=$('.ledger.active .row.selected');if(element){const item=element.parentElement,box=item.parentElement;if(item.offsetTop<box.scrollTop)box.scrollTop=item.offsetTop;else if(item.offsetTop+item.offsetHeight>box.scrollTop+box.clientHeight)box.scrollTop=item.offsetTop+item.offsetHeight-box.clientHeight;}})}
+function history(direction){const c=col(),from=direction==='undo'?c.undo:c.redo,to=direction==='undo'?c.redo:c.undo;if(!from.length)return;to.push(snapshot(c));Object.assign(c,JSON.parse(from.pop()));render();scrollSelected()}
+function action(name){if(name==='undo'||name==='redo'){history(name);return}if(name==='equals'){equals();return}if(name==='clear'){change(c=>{c.rows[c.selected]=blank();c.replace=false;c.editing=false});return}if(name==='sign'){change(c=>{const r=c.rows[c.selected];if(r.op==='+')r.op='-';else if(r.op==='-')r.op='+';else r.raw=r.raw.startsWith('-')?r.raw.slice(1):'-'+(r.raw||'0');c.replace=false;c.editing=false});return}if(name==='mc'){if(col().memory==='0')return;change(c=>c.memory='0');toast('List'+(state.active+1)+'：メモリーを消去しました');return}if(name==='mplus'||name==='mminus'){const result=calculate(col().rows);if(result.error){toast(result.error);return}if(change(c=>{c.memory=decimal(apply(parse(c.memory),result.value,name==='mplus'?'+':'-'),18)})===false)return;toast('List'+(state.active+1)+' メモリー：'+format(col().memory));}}
+function recall(index){select(index);change(c=>{c.rows[c.selected].raw=c.memory;c.replace=true;c.editing=false});toast('メモリーの値を入力しました')}
+function reset(index){select(index);change(c=>{c.rows=Array.from({length:MIN_ROWS},blank);c.selected=0;c.replace=false;c.editing=false});toast('List'+(index+1)+' をクリアしました。↶ で戻せます')}
+
+// The stable key is deliberately independent from the app/cache version.
+const STORAGE_KEY='three-list-calculator.state',STORAGE_SCHEMA=1,MAX_SAVED_CHARS=1500000,SAVED_HISTORY=20;
+let storage=null,lastStoredRaw=null,lastSavedState='',storageBlock='',storageNote='',storageWarningShown=false;
+const lockManager=globalThis.navigator?.locks;
+const lockRequired=typeof navigator!=='undefined';
+let lockHeld=false,lockPending=false,releaseSaveLock=null,pageActive=true,lockGeneration=0;
+function validNumber(value,editing=false){return typeof value==='string'&&value.length<=32768&&(editing&&(value===''||value==='-')||/^-?\d+(?:\.\d*)?$/.test(value))}
+function validateColumn(value){
+ if(!value||!Array.isArray(value.rows)||value.rows.length<MIN_ROWS||value.rows.length>MAX_ROWS||!Number.isInteger(value.selected)||value.selected<0||value.selected>=value.rows.length||typeof value.replace!=='boolean'||typeof value.editing!=='boolean'||!validNumber(value.memory)||value.memory.endsWith('.'))throw Error('invalid column');
+ const rows=value.rows.map(r=>{if(!r||!['+','-','*','/'].includes(r.op)||!validNumber(r.raw,true))throw Error('invalid row');return {op:r.op,raw:r.raw}});
+ return {rows,selected:value.selected,replace:value.replace,editing:value.editing,memory:value.memory};
+}
+function validateSaved(raw){
+ if(typeof raw!=='string'||raw.length>MAX_SAVED_CHARS)throw Error('invalid size');
+ const data=JSON.parse(raw);if(data?.schema!==STORAGE_SCHEMA)throw Error('unsupported schema');const s=data.state;
+ if(!s||!Array.isArray(s.columns)||s.columns.length!==3||!Number.isInteger(s.active)||s.active<0||s.active>2||!['reference','japan'].includes(s.format)||![2,6,10].includes(s.precision))throw Error('invalid state');
+ const columns=s.columns.map(c=>{const out=validateColumn(c);for(const key of ['undo','redo']){if(!Array.isArray(c[key])||c[key].length>SAVED_HISTORY)throw Error('invalid history');out[key]=c[key].map(item=>{if(typeof item!=='string')throw Error('invalid snapshot');return JSON.stringify(validateColumn(JSON.parse(item)))})}return out});
+ return {columns,active:s.active,format:s.format,precision:s.precision};
+}
+function storageStatus(message,warning=false){
+ storageNote=message;const status=$('#storage-status'),banner=$('#storage-warning'),resume=$('#resume-saving');if(status)status.textContent=message;if(banner)banner.hidden=!warning;if(resume)resume.hidden=!warning;
+ if(warning&&!storageWarningShown){storageWarningShown=true;toast(message)}if(!warning)storageWarningShown=false;
+}
+function loadSaved(){
+ try{
+  storage=globalThis.localStorage;if(!storage){storageStatus('この環境では自動保存できません。',true);return}
+  lastStoredRaw=storage.getItem(STORAGE_KEY);if(lastStoredRaw!==null)Object.assign(state,validateSaved(lastStoredRaw));
+ }catch(error){storageBlock=storage?'invalid':'unavailable';storageStatus(storage?'保存データを読み込めませんでした。元のデータは残しています。この画面の計算はまだ保存されません。':'この環境では自動保存できません。計算はこの画面内だけで保持されます。',true)}
+}
+function persistencePayload(includeHistory=true){
+ const columns=state.columns.map(c=>({...JSON.parse(snapshot(c)),undo:includeHistory?c.undo.slice(-SAVED_HISTORY):[],redo:includeHistory?c.redo.slice(-SAVED_HISTORY):[]}));
+ const data={schema:STORAGE_SCHEMA,state:{columns,active:state.active,format:state.format,precision:state.precision}};
+ let raw=JSON.stringify(data);
+ while(raw.length>MAX_SAVED_CHARS){const stacks=columns.flatMap(c=>[c.undo,c.redo]).filter(a=>a.length);if(!stacks.length)throw Error('too large');stacks.sort((a,b)=>b.length-a.length)[0].shift();raw=JSON.stringify(data)}
+ validateSaved(raw); // Never write a document that this version cannot reopen.
+ return raw;
+}
+function requestSaveLock(resume=false){
+ if(!lockRequired){if(resume)resumeSaving();return}
+ if(!lockManager){storageStatus('このブラウザでは安全な自動保存を利用できません。最新のSafariなどで開き、必要な計算は画像で保存してください。',true);return}
+ if(lockPending||lockHeld||!pageActive)return;lockPending=true;const generation=lockGeneration;
+ lockManager.request(STORAGE_KEY,{ifAvailable:true},async lock=>{
+  lockPending=false;
+  if(!pageActive||generation!==lockGeneration)return;
+  if(!lock){storageStatus('別の画面でこの電卓を開いているため、自動保存を止めています。そちらを閉じてから「現在の計算で保存を再開」を選んでください。',true);return}
+  lockHeld=true;
+  if(resume){if(!resumeSaving()){lockHeld=false;return}}else saveState();
+  await new Promise(resolve=>{releaseSaveLock=resolve});
+  releaseSaveLock=null;lockHeld=false;
+ }).then(()=>{if(pageActive&&generation!==lockGeneration)requestSaveLock()}).catch(()=>{lockPending=false;lockHeld=false;storageStatus('安全な自動保存を開始できませんでした。必要な計算は画像で保存してください。',true)});
+}
+function saveState(){
+ if(lockRequired&&!lockHeld)return false;
+ if(!storage||storageBlock)return false;
+ try{
+  // A stale tab must never silently overwrite a more recent calculation.
+  if(storage.getItem(STORAGE_KEY)!==lastStoredRaw){storageBlock='conflict';storageStatus('別の画面で保存内容が変わりました。再読込で最新を開くか、現在の計算で保存を再開してください。',true);return false}
+  let raw=persistencePayload();if(raw===lastSavedState){storageStatus('この端末に自動保存しています。');return true;}
+  let historyLimited=false;
+  try{storage.setItem(STORAGE_KEY,raw)}catch(error){raw=persistencePayload(false);storage.setItem(STORAGE_KEY,raw);historyLimited=true}
+  lastStoredRaw=raw;lastSavedState=raw;
+  storageStatus(historyLimited?'計算と設定を保存しました。容量不足のため取り消し履歴はこの画面内だけで保持します。':'この端末に自動保存しています。');return true;
+ }catch(error){storageStatus('端末に保存できませんでした。空き容量やブラウザの保存設定を確認し、必要な計算は画像で保存してください。',true);return false}
+}
+function resumeSaving(){
+ if(lockRequired&&!lockHeld){requestSaveLock(true);return false}
+ try{
+  storage=globalThis.localStorage;
+  if((storageBlock||storage.getItem(STORAGE_KEY)!==lastStoredRaw)&&storageBlock!=='unavailable'&&!window.confirm('端末に残っている保存データを、この画面の計算で置き換えますか？'))return false;
+  lastStoredRaw=storage.getItem(STORAGE_KEY);storageBlock='';lastSavedState='';return saveState();
+ }catch{storageStatus('自動保存を再開できませんでした。計算はこの画面を閉じる前に画像で保存してください。',true);return false}
+}
+
+function fitText(el,text,type='row'){el.textContent=text;const threshold=type==='total'?9:11;el.style.fontSize=text.length>threshold?(threshold/text.length*100)+'%':'';}
+function render(){
+ saveState();
+ cancelGesture();dismissSwipe();
+ const scrolls=$$('.rows').map(el=>el.scrollTop),focus=document.activeElement;let focusRow=null;if(focus?.classList.contains('row'))focusRow=[+focus.dataset.column,+focus.dataset.row];
+ const host=$('.ledgers');host.replaceChildren();
+ state.columns.forEach((c,i)=>{const section=document.createElement('section');section.className='ledger'+(i===state.active?' active':'');section.setAttribute('aria-label','List'+(i+1));
+ const result=calculate(c.rows),totalText=result.error?'計算エラー':format(decimal(result.value));
+ const total=document.createElement('div');total.className='total'+(result.error?' error':'');total.setAttribute('aria-label','List'+(i+1)+' 合計 '+totalText);total.setAttribute('title',result.error||totalText);const value=document.createElement('span');value.className='total-value';fitText(value,totalText,'total');total.append(value);const memory=document.createElement('button');memory.className='memory-indicator';memory.textContent='M';memory.hidden=c.memory==='0';memory.title='メモリー '+format(c.memory)+' を入力';memory.setAttribute('aria-label',memory.title);memory.addEventListener('click',()=>recall(i));total.append(memory);
+ const paper=document.createElement('div');paper.className='paper';const rows=document.createElement('div');rows.className='rows';rows.setAttribute('aria-label','List'+(i+1)+' の明細');
+ c.rows.forEach((r,j)=>{const shell=document.createElement('div');shell.className='row-shell';const button=document.createElement('button');const text=rowText(r);button.className='row'+(r.op==='-'||r.raw.startsWith('-')?' negative':'')+(c.selected===j?' selected':'');button.dataset.column=i;button.dataset.row=j;button.setAttribute('aria-label','List'+(i+1)+' '+(j+1)+'行目 '+(text||'空行'));button.setAttribute('aria-pressed',String(i===state.active&&c.selected===j));button.tabIndex=i===state.active&&c.selected===j?0:-1;const span=document.createElement('span');span.className='value';fitText(span,text);button.append(span);const remove=document.createElement('button');remove.className='row-delete';remove.textContent='削除';remove.dataset.column=i;remove.dataset.row=j;remove.setAttribute('aria-label','List'+(i+1)+' '+(j+1)+'行目を削除');remove.setAttribute('aria-hidden','true');remove.tabIndex=-1;remove.disabled=true;shell.append(button,remove);rows.append(shell)});
+ paper.append(rows);const ac=document.createElement('button');ac.className='key clear-all';ac.textContent='AC';ac.setAttribute('aria-label','List'+(i+1)+' をすべて消去');ac.addEventListener('click',()=>reset(i));section.append(total,paper,ac);host.append(section);rows.scrollTop=scrolls[i]||0;
+ });
+ $$('.tab').forEach((el,i)=>{el.setAttribute('aria-selected',String(i===state.active));el.tabIndex=i===state.active?0:-1});$('[data-action=undo]').disabled=!col().undo.length;$('[data-action=redo]').disabled=!col().redo.length;
+ $('#number-format').value=state.format;$('#precision').value=String(state.precision);
+ $('#decimal-key').textContent=state.format==='reference'?',':'.';$('#insert-row').textContent='List'+(state.active+1)+'：'+(col().selected+1)+'行目の下に空行を追加';$('#delete-row').textContent='List'+(state.active+1)+'：'+(col().selected+1)+'行目を削除';
+ if(focusRow){const el=$('[data-column="'+focusRow[0]+'"][data-row="'+focusRow[1]+'"]');if(el)el.focus({preventScroll:true})}
+}
+function cancelHold(){if(hold){clearTimeout(hold.timer);hold=null}}
+function clearSwipeStyle(shell){if(!shell)return;shell.classList.remove('swiping','swipe-open');shell.querySelector('.row').style.transform='';const remove=shell.querySelector('.row-delete');remove.disabled=true;remove.tabIndex=-1;remove.setAttribute('aria-hidden','true')}
+function dismissSwipe(restoreFocus=false){if(!swipeOpen)return;const shell=swipeOpen.shell;swipeOpen=null;clearSwipeStyle(shell);if(restoreFocus)shell.querySelector('.row').focus({preventScroll:true})}
+function cancelGesture(){cancelHold();if(!gesture)return;const g=gesture;gesture=null;g.shell.classList.remove('swiping');g.row.style.transform='';const host=$('.ledgers');if(host.hasPointerCapture?.(g.id))host.releasePointerCapture(g.id)}
+function openSwipe(g){dismissSwipe();swipeOpen={shell:g.shell,column:g.column,row:g.index};g.shell.classList.add('swipe-open');const remove=g.shell.querySelector('.row-delete');remove.disabled=false;remove.tabIndex=0;remove.setAttribute('aria-hidden','false');toast('List'+(g.column+1)+'：'+(g.index+1)+'行目の削除ボタンを表示しました')}
+function suppressPointerClick(){blockPointerClick=true;suppressClickUntil=performance.now()+500}
+document.addEventListener('pointerdown',event=>{
+ if(event.pointerType!=='mouse')pointers.add(event.pointerId);
+ if(pointers.size>1||event.isPrimary===false){multiTouch=true;suppressPointerClick();cancelGesture();dismissSwipe();return}
+ if(multiTouch)return;blockPointerClick=false;suppressClickUntil=0;
+ if(swipeOpen&&event.target.closest('.row-shell')!==swipeOpen.shell)dismissSwipe();
+},true);
+$('.ledgers').addEventListener('pointerdown',event=>{
+ const row=event.target.closest('.row');if(!row||event.button!==0||multiTouch||event.isPrimary===false)return;
+ cancelGesture();const shell=row.parentElement;gesture={id:event.pointerId,x:event.clientX,y:event.clientY,row,shell,column:+row.dataset.column,index:+row.dataset.row,kind:'pending',opened:swipeOpen?.shell===shell};
+ if(gesture.opened)return;
+ hold={timer:setTimeout(()=>{if(!gesture||gesture.kind!=='pending'||multiTouch)return;const g=gesture;suppressPointerClick();cancelGesture();insertAbove(g.column,g.index)},600)};
+});
+document.addEventListener('pointermove',event=>{
+ const g=gesture;if(!g||g.id!==event.pointerId)return;const dx=event.clientX-g.x,dy=event.clientY-g.y;
+ if(Math.hypot(dx,dy)>8)cancelHold();
+ if(g.kind==='pending'&&Math.max(Math.abs(dx),Math.abs(dy))>12){
+  if(Math.abs(dy)*1.5>=Math.abs(dx)||(!g.opened&&dx>0)){suppressPointerClick();cancelGesture();dismissSwipe();return}
+  g.kind='horizontal';$('.ledgers').setPointerCapture?.(g.id);g.shell.classList.add('swiping');
+ }
+ if(g.kind==='horizontal'){event.preventDefault();const width=g.shell.querySelector('.row-delete').offsetWidth;const offset=Math.max(0,Math.min(width,(g.opened?width:0)-dx));g.row.style.transform='translateX(-'+offset+'px)'}
+});
+function endPointer(event,cancelled=false){
+ const g=gesture;if(g&&g.id===event.pointerId){const dx=event.clientX-g.x,dy=event.clientY-g.y;const reveal=!cancelled&&!multiTouch&&g.kind==='horizontal'&&dx<=-40&&Math.abs(dx)>Math.abs(dy)*1.5;const horizontal=g.kind==='horizontal';cancelGesture();
+  if(reveal)openSwipe(g);else if(cancelled||horizontal)dismissSwipe();if(horizontal||cancelled)suppressPointerClick();
+ }
+ if(blockPointerClick)suppressClickUntil=performance.now()+500;
+ pointers.delete(event.pointerId);if(!pointers.size)multiTouch=false;
+}
+document.addEventListener('pointerup',event=>endPointer(event));
+document.addEventListener('pointercancel',event=>endPointer(event,true));
+window.addEventListener('blur',()=>{suppressPointerClick();cancelGesture();dismissSwipe();pointers.clear();multiTouch=false});
+$('.ledgers').addEventListener('pointerleave',()=>{if(gesture){suppressPointerClick();cancelGesture()}});
+// Touch capture moves from the row to the ledger when swiping starts. Ignore
+// the old row's bubbling capture loss; only loss from the ledger cancels a drag.
+$('.ledgers').addEventListener('lostpointercapture',event=>{if(event.target===$('.ledgers')&&gesture&&gesture.id===event.pointerId){suppressPointerClick();cancelGesture();dismissSwipe()}});
+$('.ledgers').addEventListener('scroll',()=>{if(gesture||swipeOpen){suppressPointerClick();cancelGesture();dismissSwipe()}},true);
+$('.ledgers').addEventListener('click',event=>{
+ if(event.detail!==0&&(blockPointerClick||performance.now()<suppressClickUntil)){event.preventDefault();return}
+ const remove=event.target.closest('.row-delete');if(remove){if(swipeOpen?.shell===remove.parentElement&&!remove.disabled)deleteRow(+remove.dataset.column,+remove.dataset.row);return}
+ const row=event.target.closest('.row');if(!row)return;select(+row.dataset.column,+row.dataset.row);
+});
+$('.ledgers').addEventListener('contextmenu',event=>{const row=event.target.closest('.row');if(!row)return;event.preventDefault();cancelGesture();if(blockPointerClick||performance.now()<suppressClickUntil)return;select(+row.dataset.column,+row.dataset.row);$('#settings').showModal()});
+$$('[data-list]').forEach(el=>el.addEventListener('click',()=>select(+el.dataset.list)));
+$('.lists').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();select((state.active+(e.key==='ArrowLeft'?2:1))%3);$$('.tab')[state.active].focus()}});
+$$('[data-digit]').forEach(el=>el.addEventListener('click',()=>typeDigit(el.dataset.digit)));$$('[data-op]').forEach(el=>el.addEventListener('click',()=>setOperator(el.dataset.op)));$$('[data-action]').forEach(el=>el.addEventListener('click',()=>action(el.dataset.action)));
+$('#settings-button').addEventListener('click',()=>{cancelGesture();dismissSwipe();$('#settings').showModal()});$$('dialog .close').forEach(el=>el.addEventListener('click',()=>el.closest('dialog').close()));$$('dialog').forEach(dialog=>dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}}));
+$('#insert-row').addEventListener('click',()=>{$('#settings').close();insertBelow()});$('#delete-row').addEventListener('click',()=>{$('#settings').close();deleteRow()});$('#number-format').addEventListener('change',e=>{state.format=e.target.value;render()});$('#precision').addEventListener('change',e=>{state.precision=+e.target.value;render()});
+document.addEventListener('keydown',e=>{
+ if($('dialog[open]'))return;if(e.key==='Escape'&&(swipeOpen||gesture)){e.preventDefault();cancelGesture();dismissSwipe(true);return}const mod=e.ctrlKey||e.metaKey;if(mod&&e.key.toLowerCase()==='z'){e.preventDefault();history(e.shiftKey?'redo':'undo');return}if(mod&&e.key.toLowerCase()==='y'){e.preventDefault();history('redo');return}if(mod)return;
+ if(e.altKey&&['1','2','3'].includes(e.key)){e.preventDefault();select(+e.key-1);return}if(e.altKey)return;
+ if(e.shiftKey&&e.key==='Delete'){e.preventDefault();deleteRow();return}
+ if(e.shiftKey&&e.key==='Enter'){e.preventDefault();insertBelow();return}
+ if(/^[0-9]$/.test(e.key)){e.preventDefault();typeDigit(e.key)}else if(e.key==='.'||e.key===','){e.preventDefault();typeDigit('.')}else if(['+','-','*','/'].includes(e.key)){e.preventDefault();setOperator(e.key)}else if(e.key==='='||(e.key==='Enter'&&!e.target.matches('button'))){e.preventDefault();equals()}else if(e.key==='Enter'&&e.target.classList.contains('row')){e.preventDefault();equals()}else if(e.key==='Delete'||e.key==='Escape'){e.preventDefault();action('clear')}else if(e.key==='Backspace'){e.preventDefault();change(c=>{c.rows[c.selected].raw=c.rows[c.selected].raw.slice(0,-1);c.replace=false;c.editing=false})}else if((e.key==='ArrowDown'||e.key==='ArrowUp')&&!e.target.classList.contains('tab')){e.preventDefault();const c=col();select(state.active,Math.max(0,Math.min(c.rows.length-1,c.selected+(e.key==='ArrowDown'?1:-1))));scrollSelected();$('.ledger.active .row.selected').focus({preventScroll:true})}
+});
+function exportImage(){
+ const count=Math.max(16,...state.columns.map(c=>{let last=c.rows.length-1;while(last>0&&!c.rows[last].raw)last--;return last+1}));if(count>300){toast('画像保存は300行までです');return}
+ const canvas=document.createElement('canvas');canvas.width=1260;canvas.height=130+count*48;const ctx=canvas.getContext('2d');ctx.fillStyle='#343636';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#f5e76c';ctx.font='26px Georgia';ctx.fillText('A-CalcM ☆  ·  3列電卓',20,35);
+ state.columns.forEach((c,i)=>{const x=20+i*415;ctx.fillStyle='#c8c8c8';ctx.fillRect(x,52,390,61);ctx.fillStyle='#333';ctx.textAlign='left';ctx.font='15px Arial';ctx.fillText('List'+(i+1),x+8,70);const result=calculate(c.rows);ctx.textAlign='right';ctx.fillStyle=result.error?'#b00000':'#111';ctx.font='37px Arial';ctx.fillText(result.error?'計算エラー':format(decimal(result.value)),x+382,101,378);ctx.fillStyle='#fff';ctx.fillRect(x,122,390,count*48);c.rows.slice(0,count).forEach((r,j)=>{const y=122+j*48;ctx.strokeStyle='#ddd';ctx.beginPath();ctx.moveTo(x,y+48);ctx.lineTo(x+390,y+48);ctx.stroke();ctx.font='31px Arial';ctx.fillStyle=r.op==='-'||r.raw.startsWith('-')?'#ff0904':'#111';ctx.fillText(rowText(r),x+382,y+37,378)})});
+ const url=canvas.toDataURL('image/png');$('#export-image').src=url;$('#download-image').href=url;$('#export-dialog').showModal();
+}
+$('#export-button').addEventListener('click',exportImage);
+$('#resume-saving')?.addEventListener('click',resumeSaving);
+$('#storage-warning')?.addEventListener('click',()=>{$('#settings').showModal();const section=$('#storage-status').closest('details');if(section)section.open=true});
+window.addEventListener('storage',event=>{if(event.key===STORAGE_KEY||event.key===null){if(event.newValue!==lastStoredRaw){storageBlock='conflict';storageStatus('別の画面で保存内容が変わりました。再読込で最新を開くか、現在の計算で保存を再開してください。',true)}}});
+loadSaved();
+requestSaveLock();
+render();
+scrollSelected();
+window.addEventListener('pagehide',()=>{pageActive=false;lockGeneration++;releaseSaveLock?.();lockHeld=false});
+window.addEventListener('pageshow',event=>{if(event.persisted){pageActive=true;requestSaveLock()}});
+// Every edit is saved synchronously while this page owns the writer lock.
+// Do not save a stale tab again at pagehide.
+function setupOffline(){
+ const status=$('#offline-status'),button=$('#apply-update');if(!status||!button)return;
+ if(!globalThis.navigator?.serviceWorker||!globalThis.isSecureContext){status.textContent='オフライン使用にはHTTPSで開いてください。ファイルを直接開く場合はオンライン版をご利用ください。';return}
+ let registration=null,applying=false,controlled=!!navigator.serviceWorker.controller;
+ function offerUpdate(){button.hidden=false;status.textContent='新しい版があります。現在の計算を保存してから更新できます。'}
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(applying){if(saveState())window.location.reload();else{applying=false;button.disabled=false;offerUpdate();toast('保存できていないため再読込を止めました。先に保存の問題を確認してください。')}return}if(controlled)offerUpdate();controlled=true});
+ button.addEventListener('click',()=>{if(!saveState()){toast('保存できていないため更新を止めました。先に保存の問題を確認してください。');return}if(registration?.waiting){applying=true;button.disabled=true;registration.waiting.postMessage({type:'SKIP_WAITING'})}else window.location.reload()});
+ function watch(reg){registration=reg;if(reg.waiting)offerUpdate();reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'){if(navigator.serviceWorker.controller){offerUpdate()}else status.textContent='オフライン使用の準備ができました。'}else if(worker.state==='redundant'&&!reg.active)status.textContent='オフライン使用の準備に失敗しました。通信を確認して再読込してください。'})});
+ navigator.serviceWorker.ready.then(()=>{if(!reg.waiting&&!reg.installing)status.textContent='オフライン使用の準備ができました。'})}
+ navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(watch).catch(()=>{status.textContent='オフライン使用の準備に失敗しました。通信とブラウザの設定を確認して再読込してください。'});
+ window.addEventListener('online',()=>{registration?.update().catch(()=>{})});
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')registration?.update().catch(()=>{})});
+}
+setupOffline();
+const api={read:()=>({activeList:state.active+1,lists:state.columns.map(c=>{const r=calculate(c.rows);return {total:r.error?null:decimal(r.value),error:r.error,selectedRow:c.selected+1,rows:c.rows.map(r=>({...r})),memory:c.memory}})}),input:({list,keys})=>{if(!Number.isInteger(list)||list<1||list>3||typeof keys!=='string'||keys.length>200||!/^[0-9.,+*/=\-\n]+$/.test(keys))throw Error('list は1〜3、keys は200文字以内の数字と四則演算記号を指定してください');select(list-1);for(const k of keys){if(/[0-9]/.test(k))typeDigit(k);else if(k==='.'||k===',')typeDigit('.');else if(k==='='||k==='\n')equals();else setOperator(k)}return api.read()}};
+if(document.modelContext?.registerTool){try{const lifecycle=new AbortController();window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});for(const tool of [{name:'read_calculator_lists',title:'3列の計算を読む',description:'この画面内の3つの計算リストと合計を読み取ります。',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>api.read()},{name:'enter_calculator_keys',title:'選択した列で計算する',description:'指定した列を選び、画面の電卓と同じ操作で数字・演算記号を順に入力します。現在の行と計算内容が更新されます。',inputSchema:{type:'object',properties:{list:{type:'integer',minimum:1,maximum:3},keys:{type:'string',maxLength:200}},required:['list','keys'],additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>api.input(input)}])Promise.resolve(document.modelContext.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}}
+})();
+</script>
+</body>
+</html>
