@@ -1,9 +1,15 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-app-build="2026.10.06.1">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#303131">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="3列電卓">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
 <meta name="description" content="3列それぞれ独立して計算できる、明細付き電卓。行を長押しすると上に空行を追加、左スワイプすると削除ボタンを表示できます。">
 <title>3列電卓</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23313232'/%3E%3Cpath d='M5 6h6v20H5zm8 0h6v20h-6zm8 0h6v20h-6z' fill='%23eee'/%3E%3Cpath d='M6 10h4m4 0h4m4 0h4M6 15h4m4 0h4m4 0h4M6 20h4m4 0h4m4 0h4' stroke='%234665a5'/%3E%3C/svg%3E">
@@ -20,6 +26,9 @@ html,body{margin:0;min-height:100%;background:#303131}body{-webkit-tap-highlight
 dialog{max-width:min(440px,calc(100vw - 28px));max-height:88dvh;border:1px solid #9c9c9c;border-radius:14px;padding:22px;background:#f7f7f7;color:#222;box-shadow:0 10px 70px #0008;font-size:15px}dialog::backdrop{background:#0008}dialog h2{margin:0 0 16px;font-size:21px}dialog p{line-height:1.65;margin:12px 0}dialog .close{float:right;border:0;background:transparent;color:#333;font-size:25px;margin:-9px -6px 0 10px;padding:4px 8px}dialog label{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:10px 0}dialog select{max-width:60%;padding:8px;font:inherit;border:1px solid #aaa;border-radius:5px;background:#fff}dialog .action{font:inherit;padding:10px 14px;background:#e6ebf6;border:1px solid #929cb0;border-radius:6px;margin:5px 0;width:100%;color:#183c74}dialog details{border-top:1px solid #ccc;margin-top:14px;padding-top:14px}dialog summary{cursor:pointer;color:#555}dialog .fine{font-size:13px;color:#666}dialog kbd{padding:2px 4px;border:1px solid #aaa;border-radius:3px;background:white}dialog img{width:100%;margin:12px 0;background:white}dialog .download{display:block;text-align:center;text-decoration:none;color:#fff;background:#31558b;border-radius:6px;padding:12px}
 @media(orientation:portrait),(max-width:580px){:root{--gap:7px;--key-font:clamp(29px,9vw,45px);--row-font:clamp(15px,4.7vw,26px)}.app{display:flex;flex-direction:column;gap:11px;height:auto;min-height:100dvh;padding:9px 10px 15px;overflow:visible}.ledgers{flex:none;height:47dvh;min-height:340px;padding:0 2px;gap:9px}.ledger{grid-template-rows:9% minmax(0,1fr) 9%;row-gap:5px}.total{font-size:clamp(21px,6.7vw,38px)}.row-shell{height:calc(100% / 12);min-height:20px}.clear-all{font-size:clamp(23px,7vw,36px);margin-top:3px}.ledger.active .paper{outline-width:3px;box-shadow:0 3px 0 3px #181818,0 -2px 0 3px #777}.control-panel{flex:none;height:560px;display:grid;grid-template-rows:54px 34px 45px minmax(0,1fr);row-gap:12px;padding:0}.brand{border-bottom:1px solid #9a9a96;padding:0 4%;overflow:visible}.wordmark{font-size:44px;justify-content:center}.brand-star{font-size:1.26em}.version{font-size:12px;bottom:2px;right:37%}.gear{font-size:41px;width:12%;position:absolute;right:1%;top:5px;height:40px}.gear svg{max-height:none}.tab{font-size:21px}.memory-tools{grid-template-columns:1fr 1fr 1fr 1fr;column-gap:10%;padding:0 3%}.memory-key{font-size:25px}.camera{padding:6px 13px}.keypad{gap:10px 10px;padding:0 2px}.key{border-radius:8px}.key.operator{font-size:calc(var(--key-font)*1.05)}.key.undo,.key.redo{font-size:var(--key-font)}}
 @media(min-width:581px) and (orientation:landscape) and (max-height:500px){.app{padding:5px 9px 8px;min-height:330px}.control-panel{row-gap:6px;grid-template-rows:10% 6% 9.8% minmax(0,1fr)}.keypad{gap:7px 9px}.ledgers{padding-right:12px;gap:10px}.ledger{row-gap:4px}.row-shell{min-height:14px}.key{border-width:1px;border-radius:5px}.memory-key{border-width:1px}.clear-all{margin-top:2px}.version{font-size:12px;bottom:0}.wordmark{font-size:clamp(24px,4.7vw,32px)}.brand{padding:0}.tab{font-size:16px}}
+.app{padding-top:max(clamp(5px,.7vw,14px),env(safe-area-inset-top));padding-right:max(clamp(8px,1.2vw,24px),env(safe-area-inset-right));padding-bottom:max(clamp(6px,.9vw,18px),env(safe-area-inset-bottom));padding-left:max(clamp(8px,1.2vw,24px),env(safe-area-inset-left))}
+@media(orientation:portrait),(max-width:580px){.app{padding-top:max(9px,env(safe-area-inset-top));padding-right:max(10px,env(safe-area-inset-right));padding-bottom:max(15px,env(safe-area-inset-bottom));padding-left:max(10px,env(safe-area-inset-left))}}
+.save-warning{position:fixed;top:max(6px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:30;max-width:94vw;background:#fff0c2;color:#542e00;border:1px solid #a36600;border-radius:7px;padding:8px 12px;font:13px/1.45 Arial,sans-serif;box-shadow:0 2px 8px #0006}.save-warning[hidden],dialog .action[hidden]{display:none}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
@@ -27,7 +36,7 @@ dialog{max-width:min(440px,calc(100vw - 28px));max-height:88dvh;border:1px solid
 <main class="app" aria-label="3列電卓">
   <section class="ledgers" aria-label="計算リスト"></section>
   <section class="control-panel" aria-label="電卓操作">
-    <header class="brand"><div class="wordmark" aria-label="A-CalcM スター">A-CalcM<span class="brand-star" aria-hidden="true">☆</span></div><span class="version">Ver. 3.2</span><button class="gear" id="settings-button" aria-label="設定と使い方" title="設定と使い方"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M25 3h10l2 7 5 3 7-2 6 9-5 5v8l5 5-5 9-8-1-5 3-2 7H25l-2-7-5-3-7 2-6-9 5-5v-8l-5-5 5-9 8 1 5-3z"/><circle cx="30" cy="30" r="16" fill="#333535"/></svg></button></header>
+    <header class="brand"><div class="wordmark" aria-label="A-CalcM スター">A-CalcM<span class="brand-star" aria-hidden="true">☆</span></div><span class="version">Ver. 3.3</span><button class="gear" id="settings-button" aria-label="設定と使い方" title="設定と使い方"><svg viewBox="0 0 60 60" aria-hidden="true"><path d="M25 3h10l2 7 5 3 7-2 6 9-5 5v8l5 5-5 9-8-1-5 3-2 7H25l-2-7-5-3-7 2-6-9 5-5v-8l-5-5 5-9 8 1 5-3z"/><circle cx="30" cy="30" r="16" fill="#333535"/></svg></button></header>
     <nav class="lists" role="tablist" aria-label="入力する列"><button class="tab" role="tab" data-list="0" aria-selected="true">List1</button><button class="tab" role="tab" data-list="1" aria-selected="false">List2</button><button class="tab" role="tab" data-list="2" aria-selected="false">List3</button></nav>
     <div class="memory-tools"><button class="memory-key clear-memory" data-action="mc" aria-label="選択中の列のメモリーを消去" title="メモリー消去">MC</button><button class="memory-key" data-action="mplus" aria-label="選択中の列の合計をメモリーに加算" title="合計をメモリーに加算">M+</button><button class="memory-key" data-action="mminus" aria-label="選択中の列の合計をメモリーから減算" title="合計をメモリーから減算">M−</button><button class="camera" id="export-button" aria-label="3列の計算を画像で保存" title="計算を画像で保存"><svg viewBox="0 0 64 51" aria-hidden="true"><defs><radialGradient id="lens"><stop stop-color="#d2e4ff"/><stop offset=".55" stop-color="#8da9d3"/><stop offset=".8" stop-color="#294265"/><stop offset="1" stop-color="#1a202b"/></radialGradient><linearGradient id="camera-body" x2="0" y2="1"><stop stop-color="#777"/><stop offset="1" stop-color="#282828"/></linearGradient></defs><path d="M5 10h12l5-8h20l5 8h12v38H5z" fill="url(#camera-body)" stroke="#d4d4d4" stroke-width="2"/><rect x="8" y="13" width="12" height="32" rx="2" fill="#252525"/><circle cx="39" cy="29" r="16" fill="url(#lens)" stroke="#c6c6c6" stroke-width="3"/></svg></button></div>
     <div class="keypad">
@@ -41,6 +50,7 @@ dialog{max-width:min(440px,calc(100vw - 28px));max-height:88dvh;border:1px solid
     </div>
   </section>
 </main>
+<button id="storage-warning" class="save-warning" hidden aria-label="保存の問題を確認">自動保存が停止しています。設定を確認</button>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <dialog id="settings"><button class="close" aria-label="閉じる">×</button><h2>設定と使い方</h2>
  <button class="action" id="insert-row">選択行の下に空行を追加</button>
@@ -50,7 +60,16 @@ dialog{max-width:min(440px,calc(100vw - 28px));max-height:88dvh;border:1px solid
  <p>List1〜3 で入力する列を切り替えます。行をタップすると修正、約0.6秒の長押しでその上に空行を追加できます。左にスワイプすると「削除」が現れ、タップすると行を削除します。↶ で元に戻せます。</p>
  <p>「+」「−」「×」「÷」で次の計算を選び、「=」で確定します。各行は上から順に計算され、空行を挟んでも計算は続きます。</p>
  <p>MC・M+・M− は列ごとに独立しています。合計欄に出る M をタップするとメモリーの値を入力できます。カメラのボタンは計算結果の画像保存です。</p>
- <details><summary>キーボード・この試作について</summary><p>数字と四則演算キーで入力。Enter で確定、Delete で行を消去、Backspace で1文字削除。Shift+Enter で行追加、Shift+Delete で行を削除。Ctrl/⌘+Z で元に戻す、Ctrl/⌘+Shift+Z でやり直す。Alt+1〜3 で列切替。</p><p class="fine">提供画像の画面構成を再現した、個人用のHTML試作です。A-CalcM公式アプリではありません。入力内容はこの画面内だけで扱い、送信・保存しません。ページを閉じたり再読込すると消えます。小数の表示は指定桁数に四捨五入されますが、計算は丸め前の値で続けます。</p></details>
+ <details><summary>ホーム画面・保存・オフライン</summary>
+ <p>iPhoneのSafariでこのページを開き、「共有」→「ホーム画面に追加」→「追加」を選びます。「Webアプリとして開く」が表示されたらオンにしてください。</p>
+ <p id="storage-status" role="status">保存を確認しています…</p>
+ <button class="action" id="resume-saving" hidden>現在の計算で保存を再開</button>
+ <p id="offline-status" role="status">オフライン使用を準備しています…</p>
+ <button class="action" id="apply-update" hidden>計算を保存して新しい版に更新</button>
+ <p class="fine">初回は通信できる状態で開き、「オフライン使用の準備ができました」と表示されてから使ってください。計算・メモリー・設定と最近の取り消し履歴を、この端末のブラウザ内に自動保存します。通常は列ごとに直近20件まで、容量に応じて履歴を減らします。</p>
+ <p class="fine">自動保存できるのは同時に1画面です。別の画面で開くと警告が出るため、先に開いた画面を閉じて保存を再開してください。端末間の同期・クラウドバックアップはありません。Safariとホーム画面のアプリでは保存先が分かれる場合があります。プライベートブラウズの終了、サイトデータの削除、OSによる削除などで保存内容を失う可能性があるため、大切な計算は画像でも保存してください。</p>
+ </details>
+ <details><summary>キーボード・この試作について</summary><p>数字と四則演算キーで入力。Enter で確定、Delete で行を消去、Backspace で1文字削除。Shift+Enter で行追加、Shift+Delete で行を削除。Ctrl/⌘+Z で元に戻す、Ctrl/⌘+Shift+Z でやり直す。Alt+1〜3 で列切替。</p><p class="fine">提供画像の画面構成を再現した、個人用のHTML試作です。A-CalcM公式アプリではありません。入力内容は端末内に保存し、アプリから外部へ送信しません。保存の状態は上の「ホーム画面・保存・オフライン」で確認できます。小数の表示は指定桁数に四捨五入されますが、計算は丸め前の値で続けます。</p></details>
 </dialog>
 <dialog id="export-dialog"><button class="close" aria-label="閉じる">×</button><h2>計算を画像で保存</h2><img id="export-image" alt="3列の計算結果"><a class="download" id="download-image" download="3列電卓.png">PNG画像を保存</a><p class="fine">保存が始まらない場合は、画像を長押しして保存してください。</p></dialog>
 <script>
@@ -74,7 +93,7 @@ function rowText(row){if(!row.raw)return row.op==='+'?'':({'-':'−','*':'×','/
 function col(){return state.columns[state.active]}
 function snapshot(c){return JSON.stringify({rows:c.rows,selected:c.selected,replace:c.replace,editing:c.editing,memory:c.memory})}
 function remember(c){c.undo.push(snapshot(c));if(c.undo.length>200)c.undo.shift();c.redo=[]}
-function change(fn){const c=col();remember(c);fn(c);render()}
+function change(fn){const c=col(),before=snapshot(c),undo=c.undo.slice(),redo=c.redo.slice();remember(c);fn(c);try{validateColumn(c)}catch{Object.assign(c,JSON.parse(before),{undo,redo});toast('計算結果が大きすぎるため操作を取り消しました。保存内容は変更していません。');return false}render();return true}
 let toastTimer;
 function toast(message){clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').classList.add('show');toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2500)}
 function ensureRows(c){while(c.selected>=c.rows.length)c.rows.push(blank())}
@@ -94,11 +113,86 @@ function deleteRow(index=state.active,row=state.columns[index]?.selected){
 }
 function scrollSelected(){requestAnimationFrame(()=>{const element=$('.ledger.active .row.selected');if(element){const item=element.parentElement,box=item.parentElement;if(item.offsetTop<box.scrollTop)box.scrollTop=item.offsetTop;else if(item.offsetTop+item.offsetHeight>box.scrollTop+box.clientHeight)box.scrollTop=item.offsetTop+item.offsetHeight-box.clientHeight;}})}
 function history(direction){const c=col(),from=direction==='undo'?c.undo:c.redo,to=direction==='undo'?c.redo:c.undo;if(!from.length)return;to.push(snapshot(c));Object.assign(c,JSON.parse(from.pop()));render();scrollSelected()}
-function action(name){if(name==='undo'||name==='redo'){history(name);return}if(name==='equals'){equals();return}if(name==='clear'){change(c=>{c.rows[c.selected]=blank();c.replace=false;c.editing=false});return}if(name==='sign'){change(c=>{const r=c.rows[c.selected];if(r.op==='+')r.op='-';else if(r.op==='-')r.op='+';else r.raw=r.raw.startsWith('-')?r.raw.slice(1):'-'+(r.raw||'0');c.replace=false;c.editing=false});return}if(name==='mc'){if(col().memory==='0')return;change(c=>c.memory='0');toast('List'+(state.active+1)+'：メモリーを消去しました');return}if(name==='mplus'||name==='mminus'){const result=calculate(col().rows);if(result.error){toast(result.error);return}change(c=>{c.memory=decimal(apply(parse(c.memory),result.value,name==='mplus'?'+':'-'),18)});toast('List'+(state.active+1)+' メモリー：'+format(col().memory));}}
+function action(name){if(name==='undo'||name==='redo'){history(name);return}if(name==='equals'){equals();return}if(name==='clear'){change(c=>{c.rows[c.selected]=blank();c.replace=false;c.editing=false});return}if(name==='sign'){change(c=>{const r=c.rows[c.selected];if(r.op==='+')r.op='-';else if(r.op==='-')r.op='+';else r.raw=r.raw.startsWith('-')?r.raw.slice(1):'-'+(r.raw||'0');c.replace=false;c.editing=false});return}if(name==='mc'){if(col().memory==='0')return;change(c=>c.memory='0');toast('List'+(state.active+1)+'：メモリーを消去しました');return}if(name==='mplus'||name==='mminus'){const result=calculate(col().rows);if(result.error){toast(result.error);return}if(change(c=>{c.memory=decimal(apply(parse(c.memory),result.value,name==='mplus'?'+':'-'),18)})===false)return;toast('List'+(state.active+1)+' メモリー：'+format(col().memory));}}
 function recall(index){select(index);change(c=>{c.rows[c.selected].raw=c.memory;c.replace=true;c.editing=false});toast('メモリーの値を入力しました')}
 function reset(index){select(index);change(c=>{c.rows=Array.from({length:MIN_ROWS},blank);c.selected=0;c.replace=false;c.editing=false});toast('List'+(index+1)+' をクリアしました。↶ で戻せます')}
+
+// The stable key is deliberately independent from the app/cache version.
+const STORAGE_KEY='three-list-calculator.state',STORAGE_SCHEMA=1,MAX_SAVED_CHARS=1500000,SAVED_HISTORY=20;
+let storage=null,lastStoredRaw=null,lastSavedState='',storageBlock='',storageNote='',storageWarningShown=false;
+const lockManager=globalThis.navigator?.locks;
+const lockRequired=typeof navigator!=='undefined';
+let lockHeld=false,lockPending=false,releaseSaveLock=null,pageActive=true,lockGeneration=0;
+function validNumber(value,editing=false){return typeof value==='string'&&value.length<=32768&&(editing&&(value===''||value==='-')||/^-?\d+(?:\.\d*)?$/.test(value))}
+function validateColumn(value){
+ if(!value||!Array.isArray(value.rows)||value.rows.length<MIN_ROWS||value.rows.length>MAX_ROWS||!Number.isInteger(value.selected)||value.selected<0||value.selected>=value.rows.length||typeof value.replace!=='boolean'||typeof value.editing!=='boolean'||!validNumber(value.memory)||value.memory.endsWith('.'))throw Error('invalid column');
+ const rows=value.rows.map(r=>{if(!r||!['+','-','*','/'].includes(r.op)||!validNumber(r.raw,true))throw Error('invalid row');return {op:r.op,raw:r.raw}});
+ return {rows,selected:value.selected,replace:value.replace,editing:value.editing,memory:value.memory};
+}
+function validateSaved(raw){
+ if(typeof raw!=='string'||raw.length>MAX_SAVED_CHARS)throw Error('invalid size');
+ const data=JSON.parse(raw);if(data?.schema!==STORAGE_SCHEMA)throw Error('unsupported schema');const s=data.state;
+ if(!s||!Array.isArray(s.columns)||s.columns.length!==3||!Number.isInteger(s.active)||s.active<0||s.active>2||!['reference','japan'].includes(s.format)||![2,6,10].includes(s.precision))throw Error('invalid state');
+ const columns=s.columns.map(c=>{const out=validateColumn(c);for(const key of ['undo','redo']){if(!Array.isArray(c[key])||c[key].length>SAVED_HISTORY)throw Error('invalid history');out[key]=c[key].map(item=>{if(typeof item!=='string')throw Error('invalid snapshot');return JSON.stringify(validateColumn(JSON.parse(item)))})}return out});
+ return {columns,active:s.active,format:s.format,precision:s.precision};
+}
+function storageStatus(message,warning=false){
+ storageNote=message;const status=$('#storage-status'),banner=$('#storage-warning'),resume=$('#resume-saving');if(status)status.textContent=message;if(banner)banner.hidden=!warning;if(resume)resume.hidden=!warning;
+ if(warning&&!storageWarningShown){storageWarningShown=true;toast(message)}if(!warning)storageWarningShown=false;
+}
+function loadSaved(){
+ try{
+  storage=globalThis.localStorage;if(!storage){storageStatus('この環境では自動保存できません。',true);return}
+  lastStoredRaw=storage.getItem(STORAGE_KEY);if(lastStoredRaw!==null)Object.assign(state,validateSaved(lastStoredRaw));
+ }catch(error){storageBlock=storage?'invalid':'unavailable';storageStatus(storage?'保存データを読み込めませんでした。元のデータは残しています。この画面の計算はまだ保存されません。':'この環境では自動保存できません。計算はこの画面内だけで保持されます。',true)}
+}
+function persistencePayload(includeHistory=true){
+ const columns=state.columns.map(c=>({...JSON.parse(snapshot(c)),undo:includeHistory?c.undo.slice(-SAVED_HISTORY):[],redo:includeHistory?c.redo.slice(-SAVED_HISTORY):[]}));
+ const data={schema:STORAGE_SCHEMA,state:{columns,active:state.active,format:state.format,precision:state.precision}};
+ let raw=JSON.stringify(data);
+ while(raw.length>MAX_SAVED_CHARS){const stacks=columns.flatMap(c=>[c.undo,c.redo]).filter(a=>a.length);if(!stacks.length)throw Error('too large');stacks.sort((a,b)=>b.length-a.length)[0].shift();raw=JSON.stringify(data)}
+ validateSaved(raw); // Never write a document that this version cannot reopen.
+ return raw;
+}
+function requestSaveLock(resume=false){
+ if(!lockRequired){if(resume)resumeSaving();return}
+ if(!lockManager){storageStatus('このブラウザでは安全な自動保存を利用できません。最新のSafariなどで開き、必要な計算は画像で保存してください。',true);return}
+ if(lockPending||lockHeld||!pageActive)return;lockPending=true;const generation=lockGeneration;
+ lockManager.request(STORAGE_KEY,{ifAvailable:true},async lock=>{
+  lockPending=false;
+  if(!pageActive||generation!==lockGeneration)return;
+  if(!lock){storageStatus('別の画面でこの電卓を開いているため、自動保存を止めています。そちらを閉じてから「現在の計算で保存を再開」を選んでください。',true);return}
+  lockHeld=true;
+  if(resume){if(!resumeSaving()){lockHeld=false;return}}else saveState();
+  await new Promise(resolve=>{releaseSaveLock=resolve});
+  releaseSaveLock=null;lockHeld=false;
+ }).then(()=>{if(pageActive&&generation!==lockGeneration)requestSaveLock()}).catch(()=>{lockPending=false;lockHeld=false;storageStatus('安全な自動保存を開始できませんでした。必要な計算は画像で保存してください。',true)});
+}
+function saveState(){
+ if(lockRequired&&!lockHeld)return false;
+ if(!storage||storageBlock)return false;
+ try{
+  // A stale tab must never silently overwrite a more recent calculation.
+  if(storage.getItem(STORAGE_KEY)!==lastStoredRaw){storageBlock='conflict';storageStatus('別の画面で保存内容が変わりました。再読込で最新を開くか、現在の計算で保存を再開してください。',true);return false}
+  let raw=persistencePayload();if(raw===lastSavedState){storageStatus('この端末に自動保存しています。');return true;}
+  let historyLimited=false;
+  try{storage.setItem(STORAGE_KEY,raw)}catch(error){raw=persistencePayload(false);storage.setItem(STORAGE_KEY,raw);historyLimited=true}
+  lastStoredRaw=raw;lastSavedState=raw;
+  storageStatus(historyLimited?'計算と設定を保存しました。容量不足のため取り消し履歴はこの画面内だけで保持します。':'この端末に自動保存しています。');return true;
+ }catch(error){storageStatus('端末に保存できませんでした。空き容量やブラウザの保存設定を確認し、必要な計算は画像で保存してください。',true);return false}
+}
+function resumeSaving(){
+ if(lockRequired&&!lockHeld){requestSaveLock(true);return false}
+ try{
+  storage=globalThis.localStorage;
+  if((storageBlock||storage.getItem(STORAGE_KEY)!==lastStoredRaw)&&storageBlock!=='unavailable'&&!window.confirm('端末に残っている保存データを、この画面の計算で置き換えますか？'))return false;
+  lastStoredRaw=storage.getItem(STORAGE_KEY);storageBlock='';lastSavedState='';return saveState();
+ }catch{storageStatus('自動保存を再開できませんでした。計算はこの画面を閉じる前に画像で保存してください。',true);return false}
+}
+
 function fitText(el,text,type='row'){el.textContent=text;const threshold=type==='total'?9:11;el.style.fontSize=text.length>threshold?(threshold/text.length*100)+'%':'';}
 function render(){
+ saveState();
  cancelGesture();dismissSwipe();
  const scrolls=$$('.rows').map(el=>el.scrollTop),focus=document.activeElement;let focusRow=null;if(focus?.classList.contains('row'))focusRow=[+focus.dataset.column,+focus.dataset.row];
  const host=$('.ledgers');host.replaceChildren();
@@ -110,6 +204,7 @@ function render(){
  paper.append(rows);const ac=document.createElement('button');ac.className='key clear-all';ac.textContent='AC';ac.setAttribute('aria-label','List'+(i+1)+' をすべて消去');ac.addEventListener('click',()=>reset(i));section.append(total,paper,ac);host.append(section);rows.scrollTop=scrolls[i]||0;
  });
  $$('.tab').forEach((el,i)=>{el.setAttribute('aria-selected',String(i===state.active));el.tabIndex=i===state.active?0:-1});$('[data-action=undo]').disabled=!col().undo.length;$('[data-action=redo]').disabled=!col().redo.length;
+ $('#number-format').value=state.format;$('#precision').value=String(state.precision);
  $('#decimal-key').textContent=state.format==='reference'?',':'.';$('#insert-row').textContent='List'+(state.active+1)+'：'+(col().selected+1)+'行目の下に空行を追加';$('#delete-row').textContent='List'+(state.active+1)+'：'+(col().selected+1)+'行目を削除';
  if(focusRow){const el=$('[data-column="'+focusRow[0]+'"][data-row="'+focusRow[1]+'"]');if(el)el.focus({preventScroll:true})}
 }
@@ -178,7 +273,31 @@ function exportImage(){
  const url=canvas.toDataURL('image/png');$('#export-image').src=url;$('#download-image').href=url;$('#export-dialog').showModal();
 }
 $('#export-button').addEventListener('click',exportImage);
+$('#resume-saving')?.addEventListener('click',resumeSaving);
+$('#storage-warning')?.addEventListener('click',()=>{$('#settings').showModal();const section=$('#storage-status').closest('details');if(section)section.open=true});
+window.addEventListener('storage',event=>{if(event.key===STORAGE_KEY||event.key===null){if(event.newValue!==lastStoredRaw){storageBlock='conflict';storageStatus('別の画面で保存内容が変わりました。再読込で最新を開くか、現在の計算で保存を再開してください。',true)}}});
+loadSaved();
+requestSaveLock();
 render();
+scrollSelected();
+window.addEventListener('pagehide',()=>{pageActive=false;lockGeneration++;releaseSaveLock?.();lockHeld=false});
+window.addEventListener('pageshow',event=>{if(event.persisted){pageActive=true;requestSaveLock()}});
+// Every edit is saved synchronously while this page owns the writer lock.
+// Do not save a stale tab again at pagehide.
+function setupOffline(){
+ const status=$('#offline-status'),button=$('#apply-update');if(!status||!button)return;
+ if(!globalThis.navigator?.serviceWorker||!globalThis.isSecureContext){status.textContent='オフライン使用にはHTTPSで開いてください。ファイルを直接開く場合はオンライン版をご利用ください。';return}
+ let registration=null,applying=false,controlled=!!navigator.serviceWorker.controller;
+ function offerUpdate(){button.hidden=false;status.textContent='新しい版があります。現在の計算を保存してから更新できます。'}
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(applying){if(saveState())window.location.reload();else{applying=false;button.disabled=false;offerUpdate();toast('保存できていないため再読込を止めました。先に保存の問題を確認してください。')}return}if(controlled)offerUpdate();controlled=true});
+ button.addEventListener('click',()=>{if(!saveState()){toast('保存できていないため更新を止めました。先に保存の問題を確認してください。');return}if(registration?.waiting){applying=true;button.disabled=true;registration.waiting.postMessage({type:'SKIP_WAITING'})}else window.location.reload()});
+ function watch(reg){registration=reg;if(reg.waiting)offerUpdate();reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'){if(navigator.serviceWorker.controller){offerUpdate()}else status.textContent='オフライン使用の準備ができました。'}else if(worker.state==='redundant'&&!reg.active)status.textContent='オフライン使用の準備に失敗しました。通信を確認して再読込してください。'})});
+ navigator.serviceWorker.ready.then(()=>{if(!reg.waiting&&!reg.installing)status.textContent='オフライン使用の準備ができました。'})}
+ navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(watch).catch(()=>{status.textContent='オフライン使用の準備に失敗しました。通信とブラウザの設定を確認して再読込してください。'});
+ window.addEventListener('online',()=>{registration?.update().catch(()=>{})});
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')registration?.update().catch(()=>{})});
+}
+setupOffline();
 const api={read:()=>({activeList:state.active+1,lists:state.columns.map(c=>{const r=calculate(c.rows);return {total:r.error?null:decimal(r.value),error:r.error,selectedRow:c.selected+1,rows:c.rows.map(r=>({...r})),memory:c.memory}})}),input:({list,keys})=>{if(!Number.isInteger(list)||list<1||list>3||typeof keys!=='string'||keys.length>200||!/^[0-9.,+*/=\-\n]+$/.test(keys))throw Error('list は1〜3、keys は200文字以内の数字と四則演算記号を指定してください');select(list-1);for(const k of keys){if(/[0-9]/.test(k))typeDigit(k);else if(k==='.'||k===',')typeDigit('.');else if(k==='='||k==='\n')equals();else setOperator(k)}return api.read()}};
 if(document.modelContext?.registerTool){try{const lifecycle=new AbortController();window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});for(const tool of [{name:'read_calculator_lists',title:'3列の計算を読む',description:'この画面内の3つの計算リストと合計を読み取ります。',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>api.read()},{name:'enter_calculator_keys',title:'選択した列で計算する',description:'指定した列を選び、画面の電卓と同じ操作で数字・演算記号を順に入力します。現在の行と計算内容が更新されます。',inputSchema:{type:'object',properties:{list:{type:'integer',minimum:1,maximum:3},keys:{type:'string',maxLength:200}},required:['list','keys'],additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>api.input(input)}])Promise.resolve(document.modelContext.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}}
 })();
