@@ -1,6 +1,6 @@
 'use strict';
 // Bump APP_VERSION in both this file and index.html for every published build.
-const APP_VERSION = '2026.10.06.1';
+const APP_VERSION = '2026.10.06.2';
 const SCOPE = self.registration.scope;
 const CACHE_PREFIX = 'three-list-calculator:' + new URL(SCOPE).pathname + ':';
 const CACHE_NAME = CACHE_PREFIX + APP_VERSION;

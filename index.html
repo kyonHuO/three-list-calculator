@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja" data-app-build="2026.10.06.1">
+<html lang="ja" data-app-build="2026.10.06.2">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -246,7 +246,9 @@ document.addEventListener('pointerup',event=>endPointer(event));
 document.addEventListener('pointercancel',event=>endPointer(event,true));
 window.addEventListener('blur',()=>{suppressPointerClick();cancelGesture();dismissSwipe();pointers.clear();multiTouch=false});
 $('.ledgers').addEventListener('pointerleave',()=>{if(gesture){suppressPointerClick();cancelGesture()}});
-$('.ledgers').addEventListener('lostpointercapture',event=>{if(gesture&&gesture.id===event.pointerId){suppressPointerClick();cancelGesture();dismissSwipe()}});
+// Touch capture moves from the row to the ledger when swiping starts. Ignore
+// the old row's bubbling capture loss; only loss from the ledger cancels a drag.
+$('.ledgers').addEventListener('lostpointercapture',event=>{if(event.target===$('.ledgers')&&gesture&&gesture.id===event.pointerId){suppressPointerClick();cancelGesture();dismissSwipe()}});
 $('.ledgers').addEventListener('scroll',()=>{if(gesture||swipeOpen){suppressPointerClick();cancelGesture();dismissSwipe()}},true);
 $('.ledgers').addEventListener('click',event=>{
  if(event.detail!==0&&(blockPointerClick||performance.now()<suppressClickUntil)){event.preventDefault();return}
